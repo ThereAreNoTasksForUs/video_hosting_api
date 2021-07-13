@@ -1,5 +1,6 @@
 package com.therearenotasksforus.videohostingapi;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -17,8 +18,6 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = VideoHostingApiApplication.class,
@@ -51,11 +50,11 @@ class UserTests {
         MvcResult mvcResult = TestMethods.getRequest(mvc, uri, userToken);
         ArrayList<Map<String, Object>> responseBodyArray = TestMethods.mapFromJsonList(mvcResult);
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        assertNotEquals(0, responseBodyArray.size());
-        assertNotEquals(null, responseBodyArray.get(0).get("username"));
-        assertEquals(responseBodyArray.get(0).get("id"), responseBodyArray.get(0).get("profile"));
-        assertNotEquals(null, responseBodyArray.get(0).get("email"));
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertNotEquals(0, responseBodyArray.size());
+        Assertions.assertNotEquals(null, responseBodyArray.get(0).get("username"));
+        Assertions.assertEquals(responseBodyArray.get(0).get("id"), responseBodyArray.get(0).get("profile"));
+        Assertions.assertNotEquals(null, responseBodyArray.get(0).get("email"));
     }
 
     @Test
@@ -64,10 +63,10 @@ class UserTests {
         MvcResult mvcResult = TestMethods.getRequest(mvc, uri, userToken);
         Map<String, Object> responseBody = TestMethods.mapFromJson(mvcResult);
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        assertNotEquals(null, responseBody.get("username"));
-        assertEquals(responseBody.get("id"), responseBody.get("profile"));
-        assertNotEquals(null, responseBody.get("email"));
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertNotEquals(null, responseBody.get("username"));
+        Assertions.assertEquals(responseBody.get("id"), responseBody.get("profile"));
+        Assertions.assertNotEquals(null, responseBody.get("email"));
     }
 
     @Test
@@ -76,10 +75,10 @@ class UserTests {
         MvcResult mvcResult = TestMethods.getRequest(mvc, uri, userToken);
         Map<String, Object> responseBody = TestMethods.mapFromJson(mvcResult);
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        assertNotEquals(null, responseBody.get("username"));
-        assertEquals(responseBody.get("id"), responseBody.get("profile"));
-        assertNotEquals(null, responseBody.get("email"));
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertNotEquals(null, responseBody.get("username"));
+        Assertions.assertEquals(responseBody.get("id"), responseBody.get("profile"));
+        Assertions.assertNotEquals(null, responseBody.get("email"));
     }
 
     @Test
@@ -94,17 +93,17 @@ class UserTests {
         MvcResult mvcResult = TestMethods.postRequest(mvc, uri, userToken, jsonBody);
         Map <String, Object> responseBody = TestMethods.mapFromJson(mvcResult);
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        assertEquals("updated_first_name", responseBody.get("firstName"));
-        assertEquals("updated_last_name", responseBody.get("lastName"));
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertEquals("updated_first_name", responseBody.get("firstName"));
+        Assertions.assertEquals("updated_last_name", responseBody.get("lastName"));
 
         uri = "/api/user";
         mvcResult = TestMethods.getRequest(mvc, uri, userToken);
         responseBody = TestMethods.mapFromJson(mvcResult);
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        assertEquals("updated_first_name", responseBody.get("firstName"));
-        assertEquals("updated_last_name", responseBody.get("lastName"));
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertEquals("updated_first_name", responseBody.get("firstName"));
+        Assertions.assertEquals("updated_last_name", responseBody.get("lastName"));
     }
 
     @Test
@@ -120,8 +119,8 @@ class UserTests {
         MvcResult mvcResult = TestMethods.postRequest(mvc, uri, userToken, jsonBody);
         Map<String, Object> response = TestMethods.mapFromJson(mvcResult);
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        assertTrue(new BCryptPasswordEncoder().matches(update_password, (String) response.get("password")));
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertTrue(new BCryptPasswordEncoder().matches(update_password, (String) response.get("password")));
 
         TestMethods.postRequest(mvc, uri, userToken, TestMethods.mapToJson(Map.ofEntries(
                 Map.entry("updated_password", old_password),

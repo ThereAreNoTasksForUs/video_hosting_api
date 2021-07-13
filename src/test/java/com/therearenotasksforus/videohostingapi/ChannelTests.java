@@ -1,5 +1,6 @@
 package com.therearenotasksforus.videohostingapi;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -19,8 +20,6 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = VideoHostingApiApplication.class,
@@ -60,28 +59,28 @@ class ChannelTests {
         Map<String, Object> responseBody = TestMethods.mapFromJson(mvcResult);
         int channelId = (int) responseBody.get("id");
 
-        assertEquals(201, mvcResult.getResponse().getStatus());
-        assertEquals("FirstTestChannel", responseBody.get("name"));
-        assertEquals("FirstTestChannel information", responseBody.get("info"));
+        Assertions.assertEquals(201, mvcResult.getResponse().getStatus());
+        Assertions.assertEquals("FirstTestChannel", responseBody.get("name"));
+        Assertions.assertEquals("FirstTestChannel information", responseBody.get("info"));
 
         uri = "/api/channels";
 
         mvcResult = TestMethods.getRequest(mvc, uri, userToken);
         ArrayList<Map<String, Object>> responseBodyArray = TestMethods.mapFromJsonList(mvcResult);
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        assertNotEquals(0, responseBodyArray.size());
-        assertEquals("FirstTestChannel", responseBodyArray.get(channelId - 1).get("name"));
-        assertEquals("FirstTestChannel information", responseBodyArray.get(channelId - 1).get("info"));
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertNotEquals(0, responseBodyArray.size());
+        Assertions.assertEquals("FirstTestChannel", responseBodyArray.get(channelId - 1).get("name"));
+        Assertions.assertEquals("FirstTestChannel information", responseBodyArray.get(channelId - 1).get("info"));
 
         uri = "/api/channel/" + channelId;
         mvcResult = TestMethods.getRequest(mvc, uri, userToken);
         responseBody = TestMethods.mapFromJson(mvcResult);
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        assertNotEquals(0, responseBodyArray.size());
-        assertEquals("FirstTestChannel", responseBody.get("name"));
-        assertEquals("FirstTestChannel information", responseBody.get("info"));
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertNotEquals(0, responseBodyArray.size());
+        Assertions.assertEquals("FirstTestChannel", responseBody.get("name"));
+        Assertions.assertEquals("FirstTestChannel information", responseBody.get("info"));
     }
 
     @Test
@@ -99,8 +98,8 @@ class ChannelTests {
         MvcResult mvcResult = TestMethods.getRequest(mvc, uri, userToken);
         ArrayList<Map<String, Object>> responseBodyArray = TestMethods.mapFromJsonList(mvcResult);
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        assertNotEquals(0, responseBodyArray.size());
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertNotEquals(0, responseBodyArray.size());
     }
 
     @Test
@@ -118,9 +117,9 @@ class ChannelTests {
         mvcResult = TestMethods.postRequest(mvc, uri, userToken, requestBodyJson);
         Map<String, Object> responseBody = TestMethods.mapFromJson(mvcResult);
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        assertEquals("Updated name", responseBody.get("name"));
-        assertEquals("Updated info", responseBody.get("info"));
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertEquals("Updated name", responseBody.get("name"));
+        Assertions.assertEquals("Updated info", responseBody.get("info"));
     }
 
     @Test
@@ -135,7 +134,7 @@ class ChannelTests {
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
 
-        assertEquals(400, mvcResult.getResponse().getStatus());
+        Assertions.assertEquals(400, mvcResult.getResponse().getStatus());
     }
 
     @Test
@@ -157,7 +156,7 @@ class ChannelTests {
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
 
         uri = "/api/channel/" + channelId;
         mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)
@@ -167,8 +166,8 @@ class ChannelTests {
         Map<String, Object> responseBody = TestMethods.mapFromJson(mvcResult);
         ArrayList<Object> subList = TestMethods.getLongArrayByKey(responseBody, "subscribers");
 
-        assertNotEquals(0, subList.size());
-        assertTrue(subList.contains(secondUserId));
+        Assertions.assertNotEquals(0, subList.size());
+        Assertions.assertTrue(subList.contains(secondUserId));
     }
 
     @Test
@@ -182,7 +181,7 @@ class ChannelTests {
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
 
-        assertEquals(400, mvcResult.getResponse().getStatus());
+        Assertions.assertEquals(400, mvcResult.getResponse().getStatus());
     }
 
     @Test
@@ -198,7 +197,7 @@ class ChannelTests {
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
 
-        assertEquals(400, mvcResult.getResponse().getStatus());
+        Assertions.assertEquals(400, mvcResult.getResponse().getStatus());
     }
 
     @Test
@@ -220,7 +219,7 @@ class ChannelTests {
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
     }
 
     @Test
@@ -243,8 +242,8 @@ class ChannelTests {
                 .mapFromJsonList(TestMethods.getRequest(mvc, "/api/channels/owned", userToken))
                 .size();
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        assertNotEquals(ownedChannelBefore, ownedChannelAfter);
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertNotEquals(ownedChannelBefore, ownedChannelAfter);
     }
 
     @Test
@@ -274,15 +273,15 @@ class ChannelTests {
                         .getRequest(mvc, "/api/channel/" + channelId, userToken))
                 .get("avatarUrl").toString();
 
-        assertEquals(201, mvcResultUploadedImage.getResponse().getStatus());
-        assertNotEquals(prevAvatar, currentAvatar);
-        assertNotEquals(null, currentAvatar);
-        assertNotEquals("", currentAvatar);
+        Assertions.assertEquals(201, mvcResultUploadedImage.getResponse().getStatus());
+        Assertions.assertNotEquals(prevAvatar, currentAvatar);
+        Assertions.assertNotEquals(null, currentAvatar);
+        Assertions.assertNotEquals("", currentAvatar);
 
         uri = "/api/channel/" + channelId + "/download/avatar";
         MvcResult mvcResultDownloadedImage = TestMethods.getRequest(mvc, uri, userToken);
 
-        assertEquals(200, mvcResultDownloadedImage.getResponse().getStatus());
+        Assertions.assertEquals(200, mvcResultDownloadedImage.getResponse().getStatus());
     }
 
 }

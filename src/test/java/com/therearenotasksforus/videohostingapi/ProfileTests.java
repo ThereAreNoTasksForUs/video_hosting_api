@@ -1,5 +1,6 @@
 package com.therearenotasksforus.videohostingapi;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -54,10 +55,10 @@ class ProfileTests {
         MvcResult mvcResult = TestMethods.getRequest(mvc, uri, userToken);
         ArrayList<Map<String, Object>> responseBodyArray = TestMethods.mapFromJsonList(mvcResult);
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        assertNotEquals(0, responseBodyArray.size());
-        assertNotEquals(null, responseBodyArray.get(0).get("user"));
-        assertEquals(responseBodyArray.get(0).get("id"), responseBodyArray.get(0).get("user"));
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertNotEquals(0, responseBodyArray.size());
+        Assertions.assertNotEquals(null, responseBodyArray.get(0).get("user"));
+        Assertions.assertEquals(responseBodyArray.get(0).get("id"), responseBodyArray.get(0).get("user"));
     }
 
     @Test
@@ -66,9 +67,9 @@ class ProfileTests {
         MvcResult mvcResult = TestMethods.getRequest(mvc, uri, userToken);
         Map<String, Object> responseBody = TestMethods.mapFromJson(mvcResult);
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        assertNotEquals(null, responseBody.get("customUrl"));
-        assertEquals(responseBody.get("id"), responseBody.get("user"));
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertNotEquals(null, responseBody.get("customUrl"));
+        Assertions.assertEquals(responseBody.get("id"), responseBody.get("user"));
     }
 
     @Test
@@ -77,9 +78,9 @@ class ProfileTests {
         MvcResult mvcResult = TestMethods.getRequest(mvc, uri, userToken);
         Map<String, Object> responseBody = TestMethods.mapFromJson(mvcResult);
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        assertNotEquals(null, responseBody.get("customUrl"));
-        assertEquals(responseBody.get("id"), responseBody.get("user"));
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertNotEquals(null, responseBody.get("customUrl"));
+        Assertions.assertEquals(responseBody.get("id"), responseBody.get("user"));
     }
 
     @Test
@@ -97,23 +98,23 @@ class ProfileTests {
         MvcResult mvcResult = TestMethods.postRequest(mvc, uri, userToken, jsonBody);
         Map <String, Object> responseBody = TestMethods.mapFromJson(mvcResult);
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        assertEquals("Updated profile information", responseBody.get("aboutProfileInfo"));
-        assertEquals("M", responseBody.get("gender"));
-        assertEquals("USA", responseBody.get("country"));
-        assertEquals("test_custom_url", responseBody.get("customUrl"));
-        assertEquals(true, responseBody.get("privateSublist"));
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertEquals("Updated profile information", responseBody.get("aboutProfileInfo"));
+        Assertions.assertEquals("M", responseBody.get("gender"));
+        Assertions.assertEquals("USA", responseBody.get("country"));
+        Assertions.assertEquals("test_custom_url", responseBody.get("customUrl"));
+        Assertions.assertEquals(true, responseBody.get("privateSublist"));
 
         uri = "/api/profile";
         mvcResult = TestMethods.getRequest(mvc, uri, userToken);
         responseBody = TestMethods.mapFromJson(mvcResult);
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        assertEquals("Updated profile information", responseBody.get("aboutProfileInfo"));
-        assertEquals("M", responseBody.get("gender"));
-        assertEquals("USA", responseBody.get("country"));
-        assertEquals("test_custom_url", responseBody.get("customUrl"));
-        assertEquals(true, responseBody.get("privateSublist"));
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertEquals("Updated profile information", responseBody.get("aboutProfileInfo"));
+        Assertions.assertEquals("M", responseBody.get("gender"));
+        Assertions.assertEquals("USA", responseBody.get("country"));
+        Assertions.assertEquals("test_custom_url", responseBody.get("customUrl"));
+        Assertions.assertEquals(true, responseBody.get("privateSublist"));
     }
 
     @Test
@@ -145,12 +146,12 @@ class ProfileTests {
                         .getRequest(mvc, "/api/profile", userToken))
                 .get("id");
 
-        assertEquals(201, mvcResultUploadedImage.getResponse().getStatus());
-        assertNotEquals(prevAvatar, currentAvatar);
+        Assertions.assertEquals(201, mvcResultUploadedImage.getResponse().getStatus());
+        Assertions.assertNotEquals(prevAvatar, currentAvatar);
 
         uri = "/api/profile/" + profileId + "/download/avatar";
         MvcResult mvcResultDownloadedImage = TestMethods.getRequest(mvc, uri, userToken);
 
-        assertEquals(200, mvcResultDownloadedImage.getResponse().getStatus());
+        Assertions.assertEquals(200, mvcResultDownloadedImage.getResponse().getStatus());
     }
 }

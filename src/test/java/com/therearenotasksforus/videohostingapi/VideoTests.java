@@ -1,5 +1,6 @@
 package com.therearenotasksforus.videohostingapi;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -19,8 +20,6 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = VideoHostingApiApplication.class,
@@ -56,7 +55,7 @@ class VideoTests {
         MvcResult mvcResult = TestMethods.getRequest(mvc, uri, userToken);
         int status = mvcResult.getResponse().getStatus();
 
-        assertEquals(200, status);
+        Assertions.assertEquals(200, status);
     }
 
     @Test
@@ -77,14 +76,14 @@ class VideoTests {
 
         Map<String, Object> responseBody = TestMethods.mapFromJson(mvcResult);
 
-        assertEquals(201, mvcResult.getResponse().getStatus());
-        assertEquals(channelId, responseBody.get("channel"));
+        Assertions.assertEquals(201, mvcResult.getResponse().getStatus());
+        Assertions.assertEquals(channelId, responseBody.get("channel"));
 
         mvcResult = TestMethods.getRequest(mvc, "/api/channel/" + channelId + "/videos", userToken);
         ArrayList<Map<String, Object>> responseBodyChannelVideosList = TestMethods
                 .mapFromJsonList(mvcResult);
 
-        assertNotEquals(0, responseBodyChannelVideosList.size());
+        Assertions.assertNotEquals(0, responseBodyChannelVideosList.size());
     }
 
     @Test
@@ -108,7 +107,7 @@ class VideoTests {
                 .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andReturn();
 
-        assertEquals(403, mvcResult.getResponse().getStatus());
+        Assertions.assertEquals(403, mvcResult.getResponse().getStatus());
     }
 
     @Test
@@ -120,7 +119,7 @@ class VideoTests {
         String uri = "/api/video/" + (int) TestMethods.mapFromJson(uploadedVideo).get("id");
         MvcResult mvcResult = TestMethods.getRequest(mvc, uri, userToken);
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
     }
 
     @Test
@@ -139,13 +138,13 @@ class VideoTests {
                 .andReturn();
         ArrayList<Object> likeList = TestMethods.getLongArrayByKey(TestMethods.mapFromJson(mvcResult), "likes");
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        assertNotEquals(0, likeList.size());
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertNotEquals(0, likeList.size());
 
         mvcResult = TestMethods.getRequest(mvc, "/api/profile", userToken);
         likeList = TestMethods.getLongArrayByKey(TestMethods.mapFromJson(mvcResult), "likes");
 
-        assertNotEquals(0, likeList.size());
+        Assertions.assertNotEquals(0, likeList.size());
 
         mvcResult = mvc.perform(MockMvcRequestBuilders
                 .post(uri)
@@ -153,8 +152,8 @@ class VideoTests {
                 .andReturn();
         likeList = TestMethods.getLongArrayByKey(TestMethods.mapFromJson(mvcResult), "likes");
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        assertEquals(0, likeList.size());
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertEquals(0, likeList.size());
     }
 
     @Test
@@ -169,8 +168,8 @@ class VideoTests {
                 .andReturn();
         ArrayList<Object> dislikeList = TestMethods.getLongArrayByKey(TestMethods.mapFromJson(mvcResult), "dislikes");
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        assertNotEquals(0, dislikeList.size());
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertNotEquals(0, dislikeList.size());
 
         mvcResult = mvc.perform(MockMvcRequestBuilders
                 .post(uri)
@@ -178,8 +177,8 @@ class VideoTests {
                 .andReturn();
         dislikeList = TestMethods.getLongArrayByKey(TestMethods.mapFromJson(mvcResult), "dislikes");
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        assertEquals(0, dislikeList.size());
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertEquals(0, dislikeList.size());
     }
 
     @Test
@@ -196,14 +195,14 @@ class VideoTests {
         String requestBodyJson = TestMethods.mapToJson(requestBody);
         MvcResult mvcResult = TestMethods.postRequest(mvc, uri, userToken, requestBodyJson);
 
-        assertEquals(201, mvcResult.getResponse().getStatus());
+        Assertions.assertEquals(201, mvcResult.getResponse().getStatus());
 
         uri = "/api/video/" + videoId + "/get/comments";
         mvcResult = TestMethods.getRequest(mvc, uri, userToken);
         ArrayList<Map<String, Object>> responseBody = TestMethods.mapFromJsonList(mvcResult);
 
-        assertEquals(1, responseBody.size());
-        assertTrue(responseBody.get(0).containsKey("commentBody") &&
+        Assertions.assertEquals(1, responseBody.size());
+        Assertions.assertTrue(responseBody.get(0).containsKey("commentBody") &&
                 responseBody.get(0).containsValue("Test comment"));
 
         uri = "/api/video/" + videoId + "/comment/" + responseBody.get(0).get("id");
@@ -211,12 +210,12 @@ class VideoTests {
                 .headers(TestMethods.getHttpHeaders(userToken)))
                 .andReturn();
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
 
         uri = "/api/video/" + videoId + "/get/comments";
         mvcResult = TestMethods.getRequest(mvc, uri, userToken);
 
-        assertEquals(0, TestMethods.mapFromJsonList(mvcResult).size());
+        Assertions.assertEquals(0, TestMethods.mapFromJsonList(mvcResult).size());
     }
 
     @Test
@@ -237,8 +236,8 @@ class VideoTests {
         mvcResult = TestMethods.getRequest(mvc, uri, userToken);
         ArrayList<Map<String, Object>> requestBody = TestMethods.mapFromJsonList(mvcResult);
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        assertNotEquals(0, requestBody.size());
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertNotEquals(0, requestBody.size());
     }
 
     @Test
@@ -253,8 +252,8 @@ class VideoTests {
         MvcResult mvcResult = TestMethods.postRequest(mvc, uri, userToken, requestBodyJson);
         Map<String, Object> responseBody = TestMethods.mapFromJson(mvcResult);
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        assertEquals("updated name", responseBody.get("name"));
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertEquals("updated name", responseBody.get("name"));
     }
 
     @Test
@@ -274,7 +273,7 @@ class VideoTests {
         MvcResult mvcResult = TestMethods.postRequest(mvc, uri, randomUserToken, requestBodyJson);
         int status = mvcResult.getResponse().getStatus();
 
-        assertEquals(403, status);
+        Assertions.assertEquals(403, status);
     }
 
     @Test
@@ -295,7 +294,7 @@ class VideoTests {
         ArrayList<Map<String, Object>> beforeVideos = TestMethods.
                 mapFromJsonList(TestMethods.getRequest(mvc, "/api/videos", userToken));
 
-        assertNotEquals(0, TestMethods.mapFromJsonList(TestMethods
+        Assertions.assertNotEquals(0, TestMethods.mapFromJsonList(TestMethods
                 .getRequest(mvc, "/api/videos", userToken)).size());
 
         String uri = "/api/video/" + videoId;
@@ -303,7 +302,7 @@ class VideoTests {
                 .headers(TestMethods.getHttpHeaders(userToken)))
                 .andReturn();
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
+        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
 
         ArrayList<Map<String, Object>> afterVideos = TestMethods
                 .mapFromJsonList(TestMethods.getRequest(mvc, "/api/videos", userToken));
@@ -315,8 +314,8 @@ class VideoTests {
                                         "/api/profile",
                                         userToken)).get("id") + "/likedvideos", userToken)).size();
 
-        assertEquals(beforeVideos.size(), afterVideos.size());
-        assertEquals(amountOfLikesBefore, amountOfLikesAfter);
+        Assertions.assertEquals(beforeVideos.size(), afterVideos.size());
+        Assertions.assertEquals(amountOfLikesBefore, amountOfLikesAfter);
     }
 
 }

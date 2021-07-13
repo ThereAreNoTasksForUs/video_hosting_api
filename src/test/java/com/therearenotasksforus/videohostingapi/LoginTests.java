@@ -1,5 +1,6 @@
 package com.therearenotasksforus.videohostingapi;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = VideoHostingApiApplication.class,
@@ -57,8 +55,8 @@ class LoginTests {
 
         int status = mvcResult.getResponse().getStatus();
 
-        assertEquals(200, status);
-        assertNotEquals(null, responseBody.get("token"));
+        Assertions.assertEquals(200, status);
+        Assertions.assertNotEquals(null, responseBody.get("token"));
     }
 
     @Test
@@ -76,6 +74,6 @@ class LoginTests {
                 .content(jsonBody)).andReturn();
 
         int status = mvcResult.getResponse().getStatus();
-        assertEquals(400, status);
+        Assertions.assertEquals(400, status);
     }
 }

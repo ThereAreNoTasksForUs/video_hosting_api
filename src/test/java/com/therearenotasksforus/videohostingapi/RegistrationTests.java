@@ -1,5 +1,6 @@
 package com.therearenotasksforus.videohostingapi;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = VideoHostingApiApplication.class,
@@ -43,7 +41,7 @@ class RegistrationTests {
 		MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)).andReturn();
 
 		int status = mvcResult.getResponse().getStatus();
-		assertEquals(405, status);
+		Assertions.assertEquals(405, status);
 	}
 
 	@Test
@@ -65,9 +63,9 @@ class RegistrationTests {
 
 		Map<String, Object> responseBody = TestMethods.mapFromJson(mvcResult);
 
-		assertEquals(201, status);
-		assertNotEquals(null, responseBody.get("username"));
-		assertNotEquals(null, responseBody.get("email"));
+		Assertions.assertEquals(201, status);
+		Assertions.assertNotEquals(null, responseBody.get("username"));
+		Assertions.assertNotEquals(null, responseBody.get("email"));
 	}
 
 	@Test
@@ -86,7 +84,7 @@ class RegistrationTests {
 				.content(jsonBody)).andReturn();
 
 		int status = mvcResult.getResponse().getStatus();
-		assertEquals(400, status);
+		Assertions.assertEquals(400, status);
 	}
 
 	@Test
@@ -105,7 +103,7 @@ class RegistrationTests {
 				.content(jsonBody)).andReturn();
 
 		int status = mvcResult.getResponse().getStatus();
-		assertEquals(201, status);
+		Assertions.assertEquals(201, status);
 
 		requestBody = new HashMap<>();
 		requestBody.put("email", "test2@test.test");
@@ -119,7 +117,7 @@ class RegistrationTests {
 				.content(jsonBody)).andReturn();
 
 		status = mvcResult.getResponse().getStatus();
-		assertEquals(400, status);
+		Assertions.assertEquals(400, status);
 
 	}
 }
